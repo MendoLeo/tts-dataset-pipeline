@@ -1,0 +1,5 @@
+nltk
+torch
+torchaudio
+transformers>=4.34
+Unidecode
