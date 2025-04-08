@@ -6,7 +6,7 @@ from tqdm.auto import tqdm
 from datetime import datetime
 
 from filter_audio import compute_probability_difference, compute_probability_difference_batched
-from utils import write_book_stats
+from data_prep.alignment_utils import write_book_stats
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -15,11 +15,12 @@ parser.add_argument(
     help="Path to the audio directory, must contain txt files with the same name. Example: outputs/openbible_swahili/PSA/",
 )
 parser.add_argument("--output_dir", default="outputs/openbible_swahili_filtered/", help="Path to the output directory")
+parser.add_argument("--language",required=True, type=str, default=None, help="Language in ISO 639-3 code.")
 parser.add_argument("--chunk_size_s", type=int, default=15, help="Chunk size in seconds")
 parser.add_argument(
     "--probability_difference_threshold",
     type=float,
-    default=-0.3,
+    default=-0.2,
     help="Probability difference threshold for filtering. Default: -0.2 from MMS.",
 )
 parser.add_argument(
@@ -107,7 +108,7 @@ def main(args):
                 ground_truth = f.read()
 
             # Compute probability difference
-            probability_difference = compute_probability_difference(audio_path, ground_truth, args.chunk_size_s)
+            probability_difference = compute_probability_difference(audio_path, ground_truth,args.language, args.chunk_size_s)
 
             # Copy audio and transcript if probability_difference is greater than threshold
             if probability_difference > args.probability_difference_threshold:
@@ -134,14 +135,16 @@ def main(args):
             with open(transcript_path) as f:
                 ground_truths.append(f.read())
 
-        probability_differences = compute_probability_difference_batched(audios, ground_truths, args.batch_size)
+        probability_differences = compute_probability_difference_batched(audios, ground_truths,args.language, args.batch_size)
         for audio_path, probability_difference in zip(audios, probability_differences):
             transcript_path = audio_path.with_suffix(".txt")
             book_name = audio_path.parent.parent.stem  # Assuming directory structure: /{book}/{chapter}/{file}
 
             # Detect book change and write stats
+
             if current_book != book_name:
-                write_book_stats(current_book)
+                write_book_stats(current_book, retained_count, rejected_count, history_file_path)
+                #write_book_stats(current_book)
                 current_book = book_name
 
             # Create output directory `output_dir/{book}/{chapter}/`
@@ -163,7 +166,8 @@ def main(args):
                 rejected_count += 1
 
         # Write stats for the last book
-        write_book_stats(current_book)
+        write_book_stats(current_book, retained_count, rejected_count, history_file_path)
+        # write_book_stats(current_book)
 
 if __name__ == "__main__":
     args = parser.parse_args()

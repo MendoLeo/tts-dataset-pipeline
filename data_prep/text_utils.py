@@ -79,7 +79,7 @@ def text_normalize(text, iso_code, lower_case=True, remove_numbers=True, remove_
             + "$"
         )
 
-        normalized_text = re.sub(complete_digit_pattern, " ", normalized_text)
+        normalized_text = re.sub(complete_digit_pattern, " * ", normalized_text)
 
     if config["rm_diacritics"]:
         from unidecode import unidecode

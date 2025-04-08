@@ -9,7 +9,7 @@ import torchaudio.transforms as T
 from torch.nn.utils.rnn import pad_sequence
 from tqdm.auto import tqdm
 
-from utils import MMS_SUBSAMPLING_RATIO,compute_alignment_scores
+from data_prep.alignment_utils import MMS_SUBSAMPLING_RATIO,compute_alignment_scores
 from text_utils import preprocess_verse
 
 parser = argparse.ArgumentParser()
@@ -19,22 +19,24 @@ parser.add_argument(
     help="Path to the audio file. Example: outputs/openbible_swahili/EPH/EPH_003/EPH_003_001.wav",
 )
 parser.add_argument("--ground_truth", required=True, help="Ground truth text to forced-align with.")
+parser.add_argument("--language", type=str, default=None, help="Language in ISO 639-3 code.")
 parser.add_argument("--chunk_size_s", type=int, default=15, help="Chunk size in seconds")
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # load MMS aligner model
 bundle = torchaudio.pipelines.MMS_FA
-model = bundle.get_model(with_star=False).to(device)
-DICTIONARY = bundle.get_dict(star=None)
+model = bundle.get_model(with_star=True).to(device)
+DICTIONARY = bundle.get_dict()
 
 
-def compute_probability_difference(audio_path: str, ground_truth: str, chunk_size_s: int = 15) -> float:
+def compute_probability_difference(audio_path: str, ground_truth: str,language: str, chunk_size_s: int = 15) -> float:
     audio_path = Path(audio_path)
 
     # apply preprocessing
-    # verse = process_verse(ground_truth,lang); from ameliored implementation
-    verse = preprocess_verse(ground_truth)
+    # verse = preprocess_verse(ground_truth)
+
+    verse = preprocess_verse(ground_truth,language)
     words = verse.split()
 
     # load audio
@@ -83,11 +85,13 @@ def compute_probability_difference(audio_path: str, ground_truth: str, chunk_siz
 
 
 def compute_probability_difference_batched(
-    audio_paths: List[Path], ground_truths: List[str], batch_size: int = 16
+    audio_paths: List[Path], ground_truths: List[str], language:str, batch_size: int = 16
 ) -> List[float]:
     # apply preprocessing
-    # verses = [preprocess_verse(v,lang) for v in ground_truths]; from ameliored implementation
-    verses = [preprocess_verse(v) for v in ground_truths]
+   
+    # verses = [preprocess_verse(v) for v in ground_truths]
+
+    verses = [preprocess_verse(v,language) for v in ground_truths]
     words = [verse.split() for verse in verses]
     # batch transcripts
     words_batches = [words[i : i + batch_size] for i in range(0, len(words), batch_size)]
@@ -156,5 +160,5 @@ def compute_probability_difference_batched(
 
 if __name__ == "__main__":
     args = parser.parse_args()
-    probability_difference = compute_probability_difference(args.audio_path, args.ground_truth, args.chunk_size_s)
+    probability_difference = compute_probability_difference(args.audio_path, args.ground_truth,args.language, args.chunk_size_s)
     print(probability_difference)
