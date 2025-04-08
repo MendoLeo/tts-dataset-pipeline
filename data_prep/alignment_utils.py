@@ -1,8 +1,3 @@
-import re
-import string
-
-from unidecode import unidecode
-import unicodedata
 import csv
 from pathlib import Path
 import torch
@@ -18,19 +13,6 @@ from denoiser.dsp import convert_audio
 #########################################################
 
 MMS_SUBSAMPLING_RATIO = 400
-
-###################
-# text utils
-###################
-
-
-def preprocess_verse(text: str) -> str:
-    text = unidecode(text)
-    text = unicodedata.normalize('NFKC', text)
-    text = text.lower()
-    text = text.translate(str.maketrans('', '', string.punctuation))
-    text = re.sub("\s+", " ", text)
-    return text
 
 
 ###############################################################################################################
