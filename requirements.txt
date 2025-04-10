@@ -1,0 +1,13 @@
+nltk
+torch
+torchaudio
+transformers>=4.34
+pydub
+denoiser
+csv
+functools
+typing
+unicodedata
+Unidecode
+uroman
+pydub
