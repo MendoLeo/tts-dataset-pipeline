@@ -9,7 +9,7 @@ import torchaudio.transforms as T
 from torch.nn.utils.rnn import pad_sequence
 from tqdm.auto import tqdm
 
-from data_prep.alignment_utils import MMS_SUBSAMPLING_RATIO,compute_alignment_scores
+from alignment_utils import MMS_SUBSAMPLING_RATIO,compute_alignment_scores
 from text_utils import preprocess_verse
 
 parser = argparse.ArgumentParser()

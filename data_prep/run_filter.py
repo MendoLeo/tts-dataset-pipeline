@@ -6,7 +6,7 @@ from tqdm.auto import tqdm
 from datetime import datetime
 
 from filter_audio import compute_probability_difference, compute_probability_difference_batched
-from data_prep.alignment_utils import write_book_stats
+from alignment_utils import write_book_stats
 
 parser = argparse.ArgumentParser()
 parser.add_argument(

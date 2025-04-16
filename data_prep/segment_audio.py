@@ -6,7 +6,7 @@ import torchaudio.transforms as T
 
 from scipy.io.wavfile import write
 
-from data_prep.alignment_utils import MMS_SUBSAMPLING_RATIO, compute_alignments
+from alignment_utils import MMS_SUBSAMPLING_RATIO, compute_alignments
 from text_utils import (pre_processing,load_transcripts)
 # after modification of this add lang parameter to handle language transcripts variety
 
