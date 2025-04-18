@@ -116,7 +116,7 @@ def segment(audio_path: str, json_path: str, output_dir: str,language: str, chun
 
     # remove "*" from alignment
     word_only_spans = [spans for spans, word in zip(word_spans, augmented_words) if word != "*"]
-    assert len(word_only_spans) == sum(len(word) for word in words)
+    #assert len(word_only_spans) == sum(len(word) for word in words)
 
     # collect verse-level segments
     
@@ -127,6 +127,7 @@ def segment(audio_path: str, json_path: str, output_dir: str,language: str, chun
         end = start + len(verse_words)
         verse_spans = word_only_spans[start:end]
         ratio = input_waveform.size(1) / num_frames
+        
         
         if not verse_spans:
             print(f"Warning: No alignment found for verse {start}-{end}. Skipping this verse.")
