@@ -22,41 +22,13 @@ MMS_SUBSAMPLING_RATIO = 400
 
 def align(emission, tokens, device):
     targets = torch.tensor([tokens], dtype=torch.int32, device=device)
+    targets = targets[targets != 0]  # Remove blank index 0 from targets
+
     alignments, scores = F.forced_align(emission, targets, blank=0)
 
-    alignments, scores = alignments[0], scores[0]  # remove batch dimension for simplicity
-    scores = scores.exp()  # convert back to probability
-    return alignments, scores
-
-    """
-     def align(emission, tokens, device):
-    # Convertir les tokens en tenseur
-    targets = torch.tensor([tokens], dtype=torch.int32, device=device)
-
-    # Remplacer les index 0 dans targets (blank) pour les supprimer
-    # Puis reformater pour garder le batch dimension si nécessaire
-    targets_no_blank = []
-    for t in targets:
-        filtered = t[t != 0]
-        if len(filtered) > 0:
-            targets_no_blank.append(filtered)
-        else:
-            raise ValueError("Target sequence contains only blank indices (0), which is invalid.")
-
-    # Reformater le batch
-    targets = torch.nn.utils.rnn.pad_sequence(targets_no_blank, batch_first=True, padding_value=-1)
-
-    # Appel à la fonction d'alignement avec blank=1 (car blank=0 est réservé)
-    alignments, scores = F.forced_align(emission, targets, blank=0)
-
-    # Suppression de la dimension batch (dans ton cas, batch de taille 1)
     alignments, scores = alignments[0], scores[0]
-
-    # Retour aux probabilités
     scores = scores.exp()
     return alignments, scores
-
-    """
 
 
 def unflatten(list_, lengths):

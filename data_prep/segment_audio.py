@@ -129,13 +129,19 @@ def segment(audio_path: str, json_path: str, output_dir: str,language: str, chun
         ratio = input_waveform.size(1) / num_frames
         
         
-        if not verse_spans:
-            print(f"Warning: No alignment found for verse {start}-{end}. Skipping this verse.")
+        if not verse_spans or not all(verse_spans):
+            print(f"[Warning] Skipping verse {start}-{end}: verse_spans is empty or contains empty elements.")
             start = end
             continue
-    
-        x0 = int(ratio * verse_spans[0][0].start)
-        x1 = int(ratio * verse_spans[-1][-1].end)
+
+        try:
+            x0 = int(ratio * verse_spans[0][0].start)
+            x1 = int(ratio * verse_spans[-1][-1].end)
+        except Exception as e:
+            print(f"[Error] Failed to compute x0/x1 for verse {start}-{end}: {e}")
+            start = end
+            continue
+
         transcript = " ".join(verse_words)
         segment = input_waveform[:, x0:x1]
         start = end
