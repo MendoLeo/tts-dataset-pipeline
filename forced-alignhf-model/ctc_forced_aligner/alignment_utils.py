@@ -12,7 +12,7 @@ from transformers import AutoModelForCTC, AutoTokenizer
 from transformers import __version__ as transformers_version
 from transformers.utils import is_flash_attn_2_available
 
-#from ctc_forced_aligner import forced_align as forced_align_cpp
+from ctc_forced_aligner import forced_align as forced_align_cpp
 
 SAMPLING_FREQ = 16000
 
@@ -213,7 +213,7 @@ def forced_align(
         raise ValueError("targets values must be within [0, log_probs.shape[-1])")
     assert log_probs.dtype == np.float32, "log_probs must be float32"
 
-    paths, scores = forced_align(
+    paths, scores = forced_align_cpp(
         log_probs,
         targets,
         blank,
