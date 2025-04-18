@@ -5,7 +5,7 @@ import unicodedata
 
 import numpy as np
 
-from .norm_config import norm_config
+from norm_config import norm_config
 
 UROMAN_PATH = os.path.join(os.path.dirname(__file__), "uroman", "bin")
 
