@@ -21,14 +21,18 @@ MMS_SUBSAMPLING_RATIO = 400
 
 
 def align(emission, tokens, device):
+    # Crée les cibles avec une dimension batch
     targets = torch.tensor([tokens], dtype=torch.int32, device=device)
-    targets = targets[targets != 0]  # Remove blank index 0 from targets
+
+    # Supprimer les 0 (blanks) tout en gardant la forme [1, N]
+    targets = targets[targets != 0].unsqueeze(0)
 
     alignments, scores = F.forced_align(emission, targets, blank=0)
 
-    alignments, scores = alignments[0], scores[0]
-    scores = scores.exp()
+    alignments, scores = alignments[0], scores[0]  # enlever la batch dimension
+    scores = scores.exp()  # convertir en probabilité
     return alignments, scores
+
 
 
 def unflatten(list_, lengths):
