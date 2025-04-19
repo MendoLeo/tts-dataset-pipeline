@@ -61,6 +61,7 @@ def cli():
         text = f.read().replace("\n", " ").strip()
 
     # includ bible verse loading after applying load_json function
+    
 
     tokens_starred, text_starred = preprocess_text(
         text, args.romanize, args.language, args.split_size, args.star_frequency

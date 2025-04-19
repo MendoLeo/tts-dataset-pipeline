@@ -18,7 +18,7 @@ usage() {
     echo "  --batch_size <int>        Batch size for inference (default: 4)"
     echo "  --window_size <int>       Window size in seconds (default: 30)"
     echo "  --context_size <int>      Overlap between chunks in seconds (default: 2)"
-    echo "  --attn_implementation <type> Attention implementation (default: none)"
+    echo "  --attn_implementation <type> Attention implementation (default: None)"
     echo "  --device <cpu/cuda>       Device for execution (default: auto-detect)"
     echo "  --segment_audio           Enable segmentation of the audio (default: true)"
     echo "  --generate_json           Enable JSON output (default: true)"
@@ -58,11 +58,24 @@ compute_dtype="${compute_dtype:-float16}"
 batch_size="${batch_size:-4}"
 window_size="${window_size:-30}"
 context_size="${context_size:-2}"
-attn_implementation="${attn_implementation:-none}"
 device="${device:-$(if [[ $(command -v nvidia-smi) ]]; then echo "cuda"; else echo "cpu"; fi)}"
 segment_audio="${segment_audio:-true}"
 generate_json="${generate_json:-true}"
 generate_txt="${generate_txt:-true}"
+
+# Flags d'option conditionnels
+attn_implementation_flag=""
+[ -n "$attn_implementation" ] && attn_implementation_flag="--attn_implementation $attn_implementation"
+
+romanize_flag=""
+segment_audio_flag=""
+generate_json_flag=""
+generate_txt_flag=""
+
+[ "$romanize" == "true" ] && romanize_flag="--romanize"
+[ "$segment_audio" == "true" ] && segment_audio_flag="--segment_audio"
+[ "$generate_json" == "true" ] && generate_json_flag="--generate_json"
+[ "$generate_txt" == "true" ] && generate_txt_flag="--generate_txt"
 
 # Vérifier que les répertoires sont définis
 if [ -z "$audio_dir" ] || [ -z "$text_dir" ] || [ -z "$output_dir" ]; then
@@ -70,7 +83,7 @@ if [ -z "$audio_dir" ] || [ -z "$text_dir" ] || [ -z "$output_dir" ]; then
     usage
 fi
 
-# Lancer le script Python pour chaque fichier dans les répertoires
+# Lancer le script Python pour chaque fichier
 for audio_file in "$audio_dir"/*.wav; do
     text_file="$text_dir/$(basename "$audio_file" .wav).txt"
     
@@ -82,17 +95,17 @@ for audio_file in "$audio_dir"/*.wav; do
             --output_dir "$output_dir" \
             --language "$language" \
             --split_size "$split_size" \
-            --romanize "$romanize" \
+            $romanize_flag \
             --alignment_model "$alignment_model" \
             --compute_dtype "$compute_dtype" \
             --batch_size "$batch_size" \
             --window_size "$window_size" \
             --context_size "$context_size" \
-            --attn_implementation "$attn_implementation" \
+            $attn_implementation_flag \
             --device "$device" \
-            --segment_audio "$segment_audio" \
-            --generate_json "$generate_json" \
-            --generate_txt "$generate_txt"
+            $segment_audio_flag \
+            $generate_json_flag \
+            $generate_txt_flag
     else
         echo "Text file for $audio_file not found."
     fi
