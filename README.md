@@ -24,3 +24,30 @@ Ce projet utilise un modèle CTC pour l'alignement forcé dans la reconnaissance
     ```bash
     %cd forced-alignhf-model
     !python3 setup.py build_ext --inplace
+
+3. **Launch alignment for txt and audios files**
+
+   ```bash
+   !python align_batch.py \
+      --audio_dir "/content/tts-dataset-pipeline/data/audios" \
+      --text_dir "/content/tts-dataset-pipeline/data/transcripts" \
+      --output_dir "/content/sample_data/pipeline-align" \
+      --language "bum" \
+      --romanize \
+      --segment_audio \
+      --generate_txt \
+      --split_size "sentence"
+
+4. **Launch with bash command**
+
+   ```bash
+   bash align_batch_launcher.sh \
+      --audio_dir "/content/tts-dataset-pipeline/data/audios" \
+      --text_dir "/content/tts-dataset-pipeline/data/transcripts" \
+      --output_dir "/content/sample_data/pipeline-align" \
+      --language "bum" \
+      --romanize \
+      --segment_audio \
+      --generate_txt \
+      --split_size "sentence"
+
