@@ -12,9 +12,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     "--audio_dir",
     required=True,
-    help="Path to the audio directory, must contain txt files with the same name. Example: outputs/openbible_swahili/PSA/",
+    help="Path to the audio directory, must contain txt files with the same name. Example: outputs/data/PSA/",
 )
-parser.add_argument("--output_dir", default="outputs/openbible_swahili_filtered/", help="Path to the output directory")
+parser.add_argument("--output_dir", default="outputs/data_filtered/", help="Path to the output directory")
 parser.add_argument("--language",required=True, type=str, default=None, help="Language in ISO 639-3 code.")
 parser.add_argument("--chunk_size_s", type=int, default=15, help="Chunk size in seconds")
 parser.add_argument(
@@ -33,40 +33,25 @@ parser.add_argument(
     default=16,
     help="Batch size for batch-filtering. Default to 16 (usable for P100 16GB).",
 )
-parser.add_argument(
-    "--log_file",
-    default="rejected_files_log.txt",
-    help="Path to the log file for storing rejected file names. Default: rejected_files_log.txt in the current directory.",
-)
-parser.add_argument(
-    "--history_file",
-    default="history.csv",
-    help="Path to the CSV file for storing book-level statistics. Default: history.csv in the current directory.",
-)
-
 def main(args):
     audio_dir = Path(args.audio_dir)
     audios = sorted(audio_dir.rglob("*/*.wav"))
 
-    # Prepare log file
-    log_file_path = Path(args.log_file)
-    log_file_path.parent.mkdir(parents=True, exist_ok=True)
-
+    
+    log_f= f"{args.output_dir}/log_file.txt"
     # Check if log file exists
-    log_file_exists = log_file_path.exists()
-    with open(log_file_path, "a") as log_file:
+    log_file_exists = log_f.exists()
+    with open(log_f, "a") as log_file:
         if not log_file_exists:
             log_file.write("Rejected Files Log\n")
             log_file.write("===================\n")
 
-    # Prepare history file
-    history_file_path = Path(args.history_file)
-    history_file_path.parent.mkdir(parents=True, exist_ok=True)
-
+    
     # Check if history file exists
-    history_file_exists = history_file_path.exists()
+    history_f= f"{args.output_dir}/history.csv"
+    history_file_exists = history_f.exists()
     if not history_file_exists:
-        with open(history_file_path, "w", newline="") as history_file:
+        with open(history_f, "w", newline="") as history_file:
             csv_writer = csv.writer(history_file)
             csv_writer.writerow(["Book", "Retained", "Rejected"])  # Header
 
@@ -74,16 +59,6 @@ def main(args):
     current_book = None
     retained_count = 0
     rejected_count = 0
-
-    """def write_book_stats(book_name):
-        # Helper function to write stats to the CSV
-        nonlocal retained_count, rejected_count
-        if book_name:
-            with open(history_file_path, "a", newline="") as history_file:
-                csv_writer = csv.writer(history_file)
-                csv_writer.writerow([book_name, retained_count, rejected_count])
-            retained_count = 0
-            rejected_count = 0"""
             
 
     if not args.batched:
@@ -93,7 +68,7 @@ def main(args):
 
             # Detect book change and write stats
             if current_book != book_name:
-                write_book_stats(current_book, retained_count, rejected_count, history_file_path)
+                write_book_stats(current_book, retained_count, rejected_count, history_f)
                 #write_book_stats(current_book)
                 current_book = book_name
 
@@ -117,13 +92,13 @@ def main(args):
                 retained_count += 1
             else:
                 # Log the rejected audio path and probability difference
-                with open(log_file_path, 'a') as log_file:
+                with open(log_f, 'a') as log_file:
                     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     log_file.write(f"[{timestamp}] Rejected: {audio_path} (Difference: {probability_difference})\n")
                 rejected_count += 1
 
         # Write stats for the last book
-        write_book_stats(current_book, retained_count, rejected_count, history_file_path)
+        write_book_stats(current_book, retained_count, rejected_count, history_f)
         
         #write_book_stats(current_book)
 
@@ -143,7 +118,7 @@ def main(args):
             # Detect book change and write stats
 
             if current_book != book_name:
-                write_book_stats(current_book, retained_count, rejected_count, history_file_path)
+                write_book_stats(current_book, retained_count, rejected_count, history_f)
                 #write_book_stats(current_book)
                 current_book = book_name
 
@@ -160,13 +135,13 @@ def main(args):
                 retained_count += 1
             else:
                 # Log the rejected audio path and probability difference
-                with open(log_file_path, 'a') as log_file:
+                with open(log_f, 'a') as log_file:
                     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     log_file.write(f"[{timestamp}] Rejected: {audio_path} (Difference: {probability_difference})\n")
                 rejected_count += 1
 
         # Write stats for the last book
-        write_book_stats(current_book, retained_count, rejected_count, history_file_path)
+        write_book_stats(current_book, retained_count, rejected_count, history_f)
         # write_book_stats(current_book)
 
 if __name__ == "__main__":

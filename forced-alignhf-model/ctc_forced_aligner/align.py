@@ -105,7 +105,7 @@ def cli():
 
             # Vérification que les timestamps sont valides
             if start_ms < end_ms:
-                filename = f"{Path(args.audio_path).stem}_{i+1}"
+                filename = f"{Path(args.audio_path).stem}_{str(i+1).zfill(3)}"
                 audio_path = (output_dir / filename).with_suffix(".wav")
                 segment = audio[start_ms:end_ms]
                 segment.export(audio_path, format="wav")
