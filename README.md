@@ -50,8 +50,6 @@ Alignment filtering
 Final formatting (CSV, JSON, etc.)
 ```
 
-> *An illustrated diagram will be added soon*
-
 ---
 
 ## 📚 Use Cases
@@ -90,7 +88,7 @@ python setup.py build_ext --inplace
 
 ### 📖 Biblical Data
 
-This case is inspired by [OpenBible](vers/swh/work) work
+This case is inspired by [OpenBible](https://github.com/bookbot-hive/OpenBible-TTShttps://github.com/bookbot-hive/OpenBible-TTS) work
 
 - Required format: structure transcripts on `.json` file format:
   ```json
@@ -113,7 +111,7 @@ This case is inspired by [OpenBible](vers/swh/work) work
       },
   ]
   ```
-  Examples of these JSON files can be found in the [Drive](to/mydrive) as for more than 10 cameroonian dialects Bible transcripts (good starter to build your own dataset, check if your dialect is [available](link/to/this).
+  Examples of these JSON files can be found in the [Drive](https://drive.google.com/drive/folders/1mq9C3AQU0J5xAwwUfWQDwoTnbH6OYi3G) as for more than 26 cameroonian dialects Bible transcripts (good starter to build your own dataset, check if your dialect is [available](https://docs.google.com/spreadsheets/d/1m2badLeGIzfrhetIE0BpXamtGAWBhvEP/edit?usp=drive_web&ouid=107335318586372564034&rtpof=true).
 
 
 - Structure:
@@ -264,7 +262,7 @@ outputs/PSA/
 
 ### 🔧 Alignment Setup
 
-This case uses a CTC model implemented in C++ by [github](lien/vers/son/git) with integration via `pybind11`.
+This case uses a CTC model implemented in C++ by [Mohamoud Ashraf](https://github.com/MahmoudAshraf97/ctc-forced-aligner/tree/main) with integration via `pybind11`.
 
 ### 🔁 Alignment
 
@@ -359,9 +357,9 @@ It is open-source and intended for research, education, and local innovation.
 This project would not be possible without the contributions and inspirations from the open-source community and the research teams behind:
 
 - [Massively Multilingual Speech (MMS)](https://github.com/facebookresearch/fairseq/tree/main/examples/mms) by Meta AI
-- [Biblecsv](https://www.sil.org/) for their work on scripture translation standards
-- [Mohammmed](git/for) for open sourced his work, where we use timestamp alignemnt to have complet alignment with audio-text generation
-- [OpenBible](git/for) for open sourced alignment method for bible case that we ameliore text processing to expand to all language also adding denoising and audio conversion
+- [Tikeng Notsawo Pascal et al](https://openreview.net/forum?id=Q5ZxoD2LqcI) for their work on building first bible transcript dataset for cameroonian dialects
+- [Mohamoud Ashraf](https://github.com/MahmoudAshraf97/ctc-forced-aligner/tree/main) for open sourced his work, where we use timestamp alignemnt to have complet alignment with audio-text generation
+- [OpenBible](https://github.com/bookbot-hive/OpenBible-TTShttps://github.com/bookbot-hive/OpenBible-TTS) for open sourced alignment method for bible case that we ameliore text processing to expand to all language also adding denoising and audio conversion
 - All contributors who support local language tech
 - Users and testers helping improve the pipeline continuously
 
