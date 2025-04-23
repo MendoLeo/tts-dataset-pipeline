@@ -6,6 +6,7 @@ usage() {
     echo "  -j <json_dir>      : Répertoire contenant les fichiers JSON."
     echo "  -a <audio_dir>     : Répertoire contenant les fichiers audio."
     echo "  -o <output_dir>    : Répertoire de sortie pour les fichiers traités."
+    echo "  -c <chunck_size>   : chunck size in second"
     echo "  -b <books>         : Liste des livres à traiter (séparés par des espaces, par défaut tous les livres sont traités)."
     echo "  -h                 : Afficher cette aide."
     exit 1
@@ -16,13 +17,14 @@ json_dir=""
 audio_dir=""
 output_dir=""
 books="GEN EXO LEV NUM DEU JOS JDG RUT 1SA 2SA 1KI 2KI 1CH 2CH EZR NEH EST JOB PSA PRO ECC SNG ISA JER LAM EZK DAN HOS JOL AMO OBA JON MIC NAM HAB ZEP HAG ZEC MAL MAT MRK LUK JHN ACT ROM 1CO 2CO GAL EPH PHP COL 1TH 2TH 1TI 2TI TIT PHM HEB JAS 1PE 2PE 1JN 2JN 3JN JUD REV"
-
+chunck_size= 15
 # Traitement des arguments
 while getopts "j:a:o:b:h" opt; do
     case $opt in
         j) json_dir="$OPTARG" ;;
         a) audio_dir="$OPTARG" ;;
         o) output_dir="$OPTARG" ;;
+        c) chunck_size="$OPTARG" ;;
         b) books="$OPTARG" ;;   # Liste des livres, prise en charge si spécifiée
         h) usage ;;              # Afficher l'aide
         *) usage ;;
@@ -69,7 +71,7 @@ for book in $books; do
 
     # Lancer la segmentation
     echo "Traitement du livre '$book'..."
-    python3 ../segmentation.py --json_path "$json_file" --audio_dir "$audio_folder" --output_dir "$output_dir/$book"
+    python3 ../segmentation.py --json_path "$json_file" --audio_dir "$audio_folder" --output_dir "$output_dir/$book" --chunck_size "$chunck_size"
     
     if [ $? -eq 0 ]; then
         echo "Traitement réussi pour '$book'."
