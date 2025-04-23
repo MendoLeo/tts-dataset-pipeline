@@ -1,7 +1,6 @@
 from pathlib import Path
 import argparse
 import shutil
-import csv
 from tqdm.auto import tqdm
 from datetime import datetime
 
@@ -9,7 +8,7 @@ from filter_audio import compute_probability_difference, compute_probability_dif
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--audio_dir", required=True, help="Directory with audio and text files.")
+    parser.add_argument("--audio_dir", required=True, help="Directory with audio and text files. Example: folder/aligned_data")
     parser.add_argument("--output_dir", default="outputs/data_filtered/", help="Output directory for filtered files.")
     parser.add_argument("--language", required=True, type=str, help="Language ISO 639-3 code.")
     parser.add_argument("--chunk_size_s", type=int, default=15, help="Chunk size in seconds.")
