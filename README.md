@@ -224,7 +224,7 @@ outputs/PSA/
 - **Align multiple books:**
   ```bash
     cd scripts-bash
-    segmentation.sh -j /to/json_files -a /to/audio_files -o /path/to/output_dir -b "GEN EXO PSA"
+    segmentation.sh -j /to/json_files -a /to/audio_files -o /to/output_dir -b "GEN EXO PSA" -c 15
 
   ```
 
@@ -252,7 +252,7 @@ outputs/PSA/
 
   ```bash
     cd scripts-bash
-    run_filter.sh -a /path/to/audio_files -o /path/to/output_dir -b "GEN EXO PSA" --t -0.3
+    run_filter.sh -a /path/to/audio_files -o /path/to/output_dir -b "GEN EXO PSA" -t -0.3
 
   ```
 
