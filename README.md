@@ -347,8 +347,14 @@ You can:
 
 ## 📄 License
 
-This project is distributed under the MIT License.  
-It is open-source and intended for research, education, and local innovation.
+This project incorporates components and resources licensed under different open-source and open-content licenses:
+
+- 🧩 Parts of the **code** are licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+- 🧱 Some elements are licensed under the [BSD 3-Clause License](https://opensource.org/licenses/BSD-3-Clause).
+- 📚 Some models are under the [Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/).
+
+Unless otherwise specified in individual files, this repository as a whole is distributed under the: **(CC BY-NC 4.0)** license.
+
 
 ---
 
