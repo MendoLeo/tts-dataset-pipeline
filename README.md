@@ -85,6 +85,8 @@ python setup.py build_ext --inplace
 ---
 
 ## 🧾 Data Preparation
+<details>
+<summary><strong>FOLDER PREPARATION<strong></summary>
 
 ### 📖 Biblical Data
 
@@ -155,6 +157,7 @@ AV1.txt must contain text to align with audio as:
   아이들이 놀이터에서 놀고, 어른들은 산책을 하고 있었다
 
   ```
+</details>
 
 ## ⚙️ Common Preprocessing Steps
 
@@ -179,7 +182,7 @@ Convert audio files to:
 
 ### 🔇 Audio Denoising
 
-Automatically removes background noise or unwanted music.
+If you have noised data,automatically removes background noise or unwanted music.
 
   ```bash
     python denoising.py \ 
@@ -187,9 +190,10 @@ Automatically removes background noise or unwanted music.
       --output_dir /denoised/audios
   ```
 
----
-
 ## 📖 Biblical Case
+
+<details>
+<summary><strong>USAGE</strong></summary>
 
 ### 📌 Alignment
 
@@ -255,10 +259,11 @@ outputs/PSA/
     run_filter.sh -a /path/to/audio_files -o /path/to/output_dir -b "GEN EXO PSA" -t -0.3
 
   ```
-
----
+</details>
 
 ## 🌍 Generic Case
+<details>
+<summary><strong>USAGE</strong></summary>
 
 ### 🔧 Alignment Setup
 
@@ -331,8 +336,7 @@ This case uses a CTC model implemented in C++ by [Mohamoud Ashraf](https://githu
       --language "bum" \
       --probability_difference_threshold -0.25 \
   ```
-
----
+</details>
 
 ## 🙌 Contributing
 
