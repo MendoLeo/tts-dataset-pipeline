@@ -1,4 +1,4 @@
-# 🧐 TTS & ASR Dataset Pipeline
+# 🗣️ TTS & ASR Dataset Pipeline
 
 
 An open-source pipeline designed to simplify the creation of datasets for Text-to-Speech (TTS) and Automatic Speech Recognition (ASR), supporting both specific (biblical) and generic (any corpus/language) use cases.
