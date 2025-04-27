@@ -234,6 +234,13 @@ outputs/PSA/
 
 ### 🧹 Filtering
 
+In both case Bible and Generic data,filtering method used is probability-based alignment score. 
+As proposed in §3.1.5 of [MMS](https://arxiv.org/abs/2305.13516), we implemented a length-normalized probability difference filtering to remove noisy alignments based on the following equation:
+
+$$\frac{1}{T} \left[\log P\left(Y^{\text {aligned}} \mid X\right)-\log P\left(Y^{\text {greedy}} \mid X\right)\right]$$
+
+where $T$ is the length of the audio, $P\left(Y^{\text{aligned}} \mid X\right)$ is the probability of the forced-alignment path, and $P\left(Y^{\text{greedy}} \mid X\right)$ is the probability of the greedy sequence.
+
 #### Arguments
 
 | Argument | Description | Default |
@@ -344,8 +351,6 @@ You can:
 
 - Report a bug or suggest a feature
 - Submit a PR with local language use cases
-- Add a new language (locale, test sets, etc.)
-- Translate this README into your language
 
 ---
 
