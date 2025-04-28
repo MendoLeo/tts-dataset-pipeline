@@ -59,6 +59,22 @@ This pipeline supports **two main scenarios**:
 - 📖 **Biblical case**: Texts from scriptures or other books, often structured using book,chapter,verse segmentation.
 - 🌍 **Generic case**: Any data with transcription and audio (podcasts, stories, interviews, etc.).
 
+## ⚡ Usage on Google Colab
+
+The framework is compatible with ![**Google Colab**](https://upload.wikimedia.org/wikipedia/commons/0/0e/Google_Colab_Logo_2021.svg), allowing users with limited resources to run the pipeline with free access to GPUs. A **tutorial notebook** is provided to facilitate the integration and usage of the pipeline directly on Colab.
+
+👉 **Access the tutorial here:** [Tutorial](tts_asr_pipeline_notebook.ipynb)
+
+
+
+### 💡 Recommendation for Optimal Usage
+For smooth execution, we recommend uploading your **text and audio data** to your ![Google Drive](https://upload.wikimedia.org/wikipedia/commons/9/94/Google_Drive_logo_2018.svg). This will make it easier to access and organize your files when running the pipeline. However, you must respect the folder structure [here](#-data-preparation)
+
+
+
+
+
+
 ---
 
 ## ⚙️ Installation
