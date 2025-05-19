@@ -1,5 +1,5 @@
 import re
-
+import os
 
 colon = ":"
 comma = ","
@@ -170,9 +170,9 @@ myanmar_digits = r"\u1040-\u1049"
 roman_numeral = r"\u2170-\u2179"
 nominal_digit_shapes = r"\u206f"
 
-# Load punctuations from MMS-lab data
-point_path='../data_prep/ponctuations.lst'
-with open(point_path, "r") as punc_f:
+# Load punctuations from MMS-lab data'
+
+with open(f"{os.path.dirname(__file__)}/punctuations.lst", "r", encoding="utf-8-sig") as punc_f:
     punc_list = punc_f.readlines()
 
 punct_pattern = r""    
