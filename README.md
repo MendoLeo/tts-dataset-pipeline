@@ -388,9 +388,10 @@ Unless otherwise specified in individual files, this repository as a whole is di
 This project would not be possible without the contributions and inspirations from the open-source community and the research teams behind:
 
 - [Massively Multilingual Speech (MMS)](https://github.com/facebookresearch/fairseq/tree/main/examples/mms) by Meta AI
-- [Tikeng Notsawo Pascal et al](https://openreview.net/forum?id=Q5ZxoD2LqcI) for their work on building first bible transcript dataset for cameroonian dialects
-- [Mohamoud Ashraf](https://github.com/MahmoudAshraf97/ctc-forced-aligner/tree/main) for open sourced his work, where we use timestamp alignemnt to have complet alignment with audio-text generation
-- [OpenBible](https://github.com/bookbot-hive/OpenBible-TTShttps://github.com/bookbot-hive/OpenBible-TTS) for open sourced alignment method for bible case that we ameliore text processing to expand to all language also adding denoising and audio conversion
+- [Tikeng Notsawo Pascal et al](https://openreview.net/forum?id=Q5ZxoD2LqcI) for their pioneering work on building the first Bible transcript dataset for Cameroonian dialects.
+- [Mohamoud Ashraf](https://github.com/MahmoudAshraf97/ctc-forced-aligner/tree/main),for open-sourcing his work on timestamp alignment, which we use for complete audio-text alignment to handle generic data. 
+- [OpenBible](https://github.com/bookbot-hive/OpenBible-TTShttps://github.com/bookbot-hive/OpenBible-TTS) for releasing their Bible-specific alignment method. We built upon their approach by improving text processing to support more languages, and by adding denoising and audio conversion.
+
 - All contributors who support local language tech
 - Users and testers helping improve the pipeline continuously
 
