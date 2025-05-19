@@ -2,12 +2,12 @@
 
 # Fonction pour afficher l'aide
 usage() {
-    echo "Usage: $0 -j <json_dir> -a <audio_dir> -o <output_dir> [-b <books>] [-h]"
+    echo "Usage: $0 -j <json_dir> -a <audio_dir> -o <output_dir> [-c <chunk_size>] [-b <books>] [-h]"
     echo "  -j <json_dir>      : Répertoire contenant les fichiers JSON."
     echo "  -a <audio_dir>     : Répertoire contenant les fichiers audio."
     echo "  -o <output_dir>    : Répertoire de sortie pour les fichiers traités."
-    echo "  -c <chunck_size>   : chunck size in second"
-    echo "  -b <books>         : Liste des livres à traiter (séparés par des espaces, par défaut tous les livres sont traités)."
+    echo "  -c <chunk_size>    : Taille des segments en secondes (défaut : 15)"
+    echo "  -b <books>         : Liste des livres à traiter (défaut : tous)."
     echo "  -h                 : Afficher cette aide."
     exit 1
 }
@@ -16,17 +16,18 @@ usage() {
 json_dir=""
 audio_dir=""
 output_dir=""
+chunk_size=15
 books="GEN EXO LEV NUM DEU JOS JDG RUT 1SA 2SA 1KI 2KI 1CH 2CH EZR NEH EST JOB PSA PRO ECC SNG ISA JER LAM EZK DAN HOS JOL AMO OBA JON MIC NAM HAB ZEP HAG ZEC MAL MAT MRK LUK JHN ACT ROM 1CO 2CO GAL EPH PHP COL 1TH 2TH 1TI 2TI TIT PHM HEB JAS 1PE 2PE 1JN 2JN 3JN JUD REV"
-chunck_size= 15
+
 # Traitement des arguments
 while getopts "j:a:o:c:b:h" opt; do
     case $opt in
         j) json_dir="$OPTARG" ;;
         a) audio_dir="$OPTARG" ;;
         o) output_dir="$OPTARG" ;;
-        c) chunck_size="$OPTARG" ;;
-        b) books="$OPTARG" ;;   # Liste des livres, prise en charge si spécifiée
-        h) usage ;;              # Afficher l'aide
+        c) chunk_size="$OPTARG" ;;
+        b) books="$OPTARG" ;;
+        h) usage ;;
         *) usage ;;
     esac
 done
@@ -37,19 +38,23 @@ if [ -z "$json_dir" ] || [ -z "$audio_dir" ] || [ -z "$output_dir" ]; then
     usage
 fi
 
-# Vérification que les répertoires existent
-if [ ! -d "$json_dir" ]; then
-    echo "Erreur : Le répertoire JSON '$json_dir' n'existe pas."
-    exit 1
-fi
+# Vérification des dossiers
+for dir in "$json_dir" "$audio_dir"; do
+    if [ ! -d "$dir" ]; then
+        echo "Erreur : Le répertoire '$dir' n'existe pas."
+        exit 1
+    fi
+done
 
-if [ ! -d "$audio_dir" ]; then
-    echo "Erreur : Le répertoire audio '$audio_dir' n'existe pas."
-    exit 1
-fi
-
+# Création du répertoire de sortie si nécessaire
 if [ ! -d "$output_dir" ]; then
-    echo "Erreur : Le répertoire de sortie '$output_dir' n'existe pas."
+    echo "Création du répertoire de sortie '$output_dir'..."
+    mkdir -p "$output_dir"
+fi
+
+# Vérifie la présence du script Python
+if [ ! -f ../segmentation.py ]; then
+    echo "Erreur : Le fichier '../segmentation.py' est introuvable."
     exit 1
 fi
 
@@ -58,29 +63,28 @@ for book in $books; do
     json_file="$json_dir/$book.json"
     audio_folder="$audio_dir/$book"
 
-    # Vérification de l'existence des fichiers pour chaque livre
     if [ ! -f "$json_file" ]; then
-        echo "Avertissement : Le fichier JSON pour '$book' n'existe pas. Passer au livre suivant."
+        echo "Avertissement : JSON manquant pour '$book'. Passage."
         continue
     fi
 
     if [ ! -d "$audio_folder" ]; then
-        echo "Avertissement : Le répertoire audio pour '$book' n'existe pas. Passer au livre suivant."
+        echo "Avertissement : Audio manquant pour '$book'. Passage."
         continue
     fi
 
-    # Lancer la segmentation
     echo "Traitement du livre '$book'..."
-    python3 ../segmentation.py --json_path "$json_file" --audio_dir "$audio_folder" --output_dir "$output_dir/$book" --chunck_size "$chunck_size"
-    
+    python3 ../segmentation.py \
+        --json_path "$json_file" \
+        --audio_dir "$audio_folder" \
+        --output_dir "$output_dir/$book" \
+        --chunk_size "$chunk_size"
+
     if [ $? -eq 0 ]; then
-        echo "Traitement réussi pour '$book'."
+        echo "✅ Livre '$book' traité avec succès."
     else
-        echo "Erreur lors du traitement de '$book'."
+        echo "❌ Erreur lors du traitement de '$book'."
     fi
 done
 
-echo "Traitement terminé."
-
-# usage
-# ./segmentation.sh -j /path/to/json_files -a /path/to/audio_files -o /path/to/output_dir -b "GEN EXO PSA"
+echo "🎉 Traitement terminé."
