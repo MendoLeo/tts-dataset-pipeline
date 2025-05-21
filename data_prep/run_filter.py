@@ -136,7 +136,11 @@ def main(args):
 
         prob_diffs = compute_probability_difference_batched(valid_audios, ground_truths, args.language, args.batch_size)
 
-        for audio_path, transcript_path, prob_diff in zip(valid_audios, valid_transcripts, prob_diffs):
+        for audio_path, transcript_path, prob_diff in tqdm(
+            zip(valid_audios, valid_transcripts, prob_diffs),
+            total=len(valid_audios),
+            desc=f"Filtering {base_dir_name} (batched)"
+        ):
             book_name = audio_path.parent.parent.stem
             if current_book != book_name:
                 if current_book is not None:
