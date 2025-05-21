@@ -268,9 +268,7 @@ outputs/PSA/
 In both case Bible and Generic data,filtering method used is probability-based alignment score. 
 As proposed in §3.1.5 of [MMS](https://arxiv.org/abs/2305.13516), we implemented a length-normalized probability difference filtering to remove noisy alignments based on the following equation:
 
-$$
-\frac{1}{T} \left[\log P\left(Y^{\text{aligned}} \mid X\right) - \log P\left(Y^{\text{greedy}} \mid X\right)\right]
-$$
+$\frac{1}{T} \left[\log P\left(Y^{\text{aligned}} \mid X\right) - \log P\left(Y^{\text{greedy}} \mid X\right)\right]$
 
 where $T$ is the length of the audio, $P\left(Y^{\text{aligned}} \mid X\right)$ is the probability of the forced-alignment path, and $P\left(Y^{\text{greedy}} \mid X\right)$ is the probability of the greedy sequence.
 
@@ -355,7 +353,7 @@ This case uses a CTC model implemented in C++ by [Mohamoud Ashraf](https://githu
       --split_size "sentence"
 ```
 
-- **Optional:** Bash script alignment (serial or parallel)
+- **Optional:** Bash script alignment
 
 ```bash
    align_batch_launcher.sh \
@@ -369,7 +367,8 @@ This case uses a CTC model implemented in C++ by [Mohamoud Ashraf](https://githu
       --split_size "sentence"
 ```
 
-### 🧹 Generic Filtering
+### 🧹 Generic Filtering([arguments](#arguments-1))
+
 
 ```bash
     cd data_prep

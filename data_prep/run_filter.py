@@ -59,11 +59,6 @@ def process_file(audio_path, transcript_path, probability_difference, threshold,
     output_path = output_dir / base_dir_name / chapter
     output_path.mkdir(parents=True, exist_ok=True)
 
-    # skip if already segmented
-    if any(output_path.iterdir()):
-        print(f"Skipping {audio_path.parent.parent.stem}")
-        return
-
     if probability_difference > threshold:
         shutil.copy(audio_path, output_path / audio_path.name)
         shutil.copy(transcript_path, output_path / transcript_path.name)
@@ -78,6 +73,13 @@ def main(args):
     audio_dir = Path(args.audio_dir)
     output_dir = Path(args.output_dir)
     log_f, history_f = setup_logging(output_dir)
+
+    # skip if already filtered
+    if any(output_dir.iterdir()):
+        print(f"Skipping {audio_dir.stem}")
+        return
+
+
 
     audios = sorted(audio_dir.rglob("**/*.wav"))
     base_dir_name = audio_dir.stem
