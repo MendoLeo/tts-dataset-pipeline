@@ -367,7 +367,9 @@ This case uses a CTC model implemented in C++ by [Mohamoud Ashraf](https://githu
       --split_size "sentence"
 ```
 
-### 🧹 Generic Filtering([arguments](#arguments-1))
+### 🧹 Generic Filtering
+
+#### [arguments](#-arguments-1)
 
 
 ```bash
