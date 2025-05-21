@@ -15,7 +15,8 @@ def parse_args():
         required=True,
         help="Path to the audio directory, must contain txt files with the same name. Example: outputs/data/PSA/",
     )
-    parser.add_argument("--output_dir", default="outputs/data_filtered/", help="Path to the output directory")
+    parser.add_argument("--output_dir", required=True, help="Path to the directory to write filtered outputs.")
+    parser.add_argument("--log_dir", help="Directory for storing log_file.txt and history.csv. Defaults to output_dir.")
     parser.add_argument("--language", required=True, type=str, help="Language in ISO 639-3 code.")
     parser.add_argument("--chunk_size_s", type=int, default=15, help="Chunk size in seconds")
     parser.add_argument(
@@ -37,10 +38,10 @@ def parse_args():
     )
     return parser.parse_args()
 
-def setup_logging(output_dir: Path):
-    output_dir.mkdir(parents=True, exist_ok=True)
-    log_f = output_dir / "log_file.txt"
-    history_f = output_dir / "history.csv"
+def setup_logging(log_dir: Path):
+    log_dir.mkdir(parents=True, exist_ok=True)
+    log_f = log_dir / "log_file.txt"
+    history_f = log_dir / "history.csv"
 
     if not log_f.exists():
         with open(log_f, "w") as f:
@@ -56,7 +57,7 @@ def setup_logging(output_dir: Path):
 def process_file(audio_path, transcript_path, probability_difference, threshold, output_dir, base_dir_name, log_f):
     chapter = audio_path.parent.stem
 
-    output_path = output_dir / base_dir_name / chapter
+    output_path = output_dir / chapter
     output_path.mkdir(parents=True, exist_ok=True)
 
     if probability_difference > threshold:
@@ -72,17 +73,18 @@ def process_file(audio_path, transcript_path, probability_difference, threshold,
 def main(args):
     audio_dir = Path(args.audio_dir)
     output_dir = Path(args.output_dir)
-    log_f, history_f = setup_logging(output_dir)
+    log_dir = Path(args.log_dir) if args.log_dir else output_dir
 
-    # skip if already filtered
-    if any(output_dir.iterdir()):
-        print(f"Skipping {audio_dir.stem}")
+    log_f, history_f = setup_logging(log_dir)
+
+    base_dir_name = audio_dir.stem
+    
+    # skipping if already filtered
+    if output_dir.exists() and any(output_dir.iterdir()):
+        print(f"Skipping {base_dir_name}")
         return
 
-
-
     audios = sorted(audio_dir.rglob("**/*.wav"))
-    base_dir_name = audio_dir.stem
 
     current_book = None
     retained_count = 0

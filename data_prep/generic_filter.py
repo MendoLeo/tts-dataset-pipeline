@@ -80,13 +80,14 @@ def main(args):
     audio_dir = Path(args.audio_dir)
     output_dir = Path(args.output_dir)
     log_f, csv_f = setup_logging(output_dir)
-
-    if any(output_dir.iterdir()):
-        print(f"Skipping {audio_dir.stem}")
-        return
-
+    
     audios = sorted(audio_dir.rglob("**/*.wav"))
     base_dir_name = audio_dir.stem
+
+    # skipping if already filtered
+    if output_dir.exists() and any(output_dir.iterdir()):
+        print(f"Skipping {base_dir_name}")
+        return
 
     current_folder = None
     retained_count = 0

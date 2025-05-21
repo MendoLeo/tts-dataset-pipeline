@@ -2,8 +2,7 @@ import os
 import argparse
 from pathlib import Path
 from tqdm import tqdm
-from alignment_utils import denoise  # Assurez-vous que la fonction 'denoise' est définie dans 'alignment_utils'
-
+from alignment_utils import denoise  
 def denoiser(src_path: Path, output_dir: str, extension: str = 'wav'):
     """
     Appliquer la réduction du bruit sur les fichiers audio dans le répertoire source.
@@ -16,7 +15,7 @@ def denoiser(src_path: Path, output_dir: str, extension: str = 'wav'):
     # Récupérer tous les fichiers audio du répertoire source avec l'extension spécifiée
     raw_src_audios = sorted(src_path.rglob(f'*.{extension}'))
 
-    # Vérifier s'il n'y a pas de fichiers trouvés
+    
     if not raw_src_audios:
         print(f"Aucun fichier audio avec l'extension .{extension} trouvé dans {src_path}.")
         return
