@@ -369,7 +369,7 @@ This case uses a CTC model implemented in C++ by [Mohamoud Ashraf](https://githu
 
 ### 🧹 Generic Filtering
 
-#### [arguments](#-arguments-1)
+#### [arguments](#arguments-1)
 
 
 ```bash
