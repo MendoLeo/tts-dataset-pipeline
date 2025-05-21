@@ -59,6 +59,11 @@ def process_file(audio_path, transcript_path, probability_difference, threshold,
     output_path = output_dir / base_dir_name / chapter
     output_path.mkdir(parents=True, exist_ok=True)
 
+    # skip if already segmented
+    if any(output_path.iterdir()):
+        print(f"Skipping {audio_path.parent.parent.stem}")
+        return
+
     if probability_difference > threshold:
         shutil.copy(audio_path, output_path / audio_path.name)
         shutil.copy(transcript_path, output_path / transcript_path.name)

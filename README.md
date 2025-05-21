@@ -213,6 +213,21 @@ If you have noised data,automatically removes background noise or unwanted music
 
 ### 📌 Alignment
 
+#### Arguments
+
+| Argument (Python)      | Bash Flag (multi-book) | Description                                        | Default      |
+|------------------------|------------------------|----------------------------------------------------|--------------|
+| `--json_path`          | `-j`                   | Path to the JSON alignment file                    | **Required** |
+| `--audio_dir`          | `-a`                   | Path to the folder containing audio files          | **Required** |
+| `--output_dir`         | `-o`                   | Path to save segmented output                      | **Required** |
+| `--language`           | `-l`                   | Language in ISO 639-3 code                         | **Required** |
+| `--chunk_size_s`       | `-c`                   | Size of chunks (segments) in seconds               | `15`         |
+| *(not applicable)*     | `-b`                   | List of books to process (space-separated)         | All books(bible)    |
+| *(not applicable)*     | `-h`                   | Show help message and exit                         | -            |
+
+
+
+
 - **Align single book:**
   ```bash
     python run_segmentation.py \
@@ -244,7 +259,7 @@ outputs/PSA/
 - **Align multiple books:**
   ```bash
     cd scripts-bash
-    segmentation.sh -j /to/json_files -a /to/audio_files -o /to/output_dir -b "GEN EXO PSA" -c 15
+    segmentation.sh -j /to/json_files -a /to/audio_files -o /to/output_dir -b "GEN EXO PSA" -c 15 -l language
 
   ```
 
@@ -253,18 +268,23 @@ outputs/PSA/
 In both case Bible and Generic data,filtering method used is probability-based alignment score. 
 As proposed in §3.1.5 of [MMS](https://arxiv.org/abs/2305.13516), we implemented a length-normalized probability difference filtering to remove noisy alignments based on the following equation:
 
-  $$\frac{1}{T} \left[\log P\left(Y^{\text {aligned}} \mid X\right)-\log P\left(Y^{\text {greedy}} \mid X\right)\right]$$
+$$
+\frac{1}{T} \left[\log P\left(Y^{\text{aligned}} \mid X\right) - \log P\left(Y^{\text{greedy}} \mid X\right)\right]
+$$
 
 where $T$ is the length of the audio, $P\left(Y^{\text{aligned}} \mid X\right)$ is the probability of the forced-alignment path, and $P\left(Y^{\text{greedy}} \mid X\right)$ is the probability of the greedy sequence.
 
 #### Arguments
 
-| Argument | Description | Default |
-|---|---|---|
-| `--audio_path` | Path to the audio and transcript file with the same name | Required |
-| `--language` | Language in ISO 639-3 code | Required |
-| `--chunk_size` | Chunk size in seconds | 15 seconds as in mms |
-| `--probability_difference_threshold` | threshold for bad alignment removing | -0.2 as in mms project |
+| Argument (Python)                          | Bash Flag (multi-book) | Description                                      | Default        |
+|-------------------------------------------|-------------------------|--------------------------------------------------|----------------|
+| `--audio_dir`                              | `-a`                    | Path to the audio and transcript files (same name) | **Required**   |
+| `--output_dir`                             | `-o`                    | Directory to save filtered alignments           | **Required**   |
+| `--language`                               | `-l`                    | Language in ISO 639-3 code                       | **Required**   |
+| `--chunk_size`                             | `/`                    | Chunk size in seconds                            | `15`           |
+| `--probability_difference_threshold`       | `-t`                    | Threshold for removing bad alignments           | `-0.2`         |
+| `--batched`                                | `-B`                    | Enable batch filtering mode                      | `False`        |
+| `--batch_size`                             | `-s`          | Batch size for batch filtering                   | `16`           |
 
 - **Filter single book:**
   ```bash
@@ -279,7 +299,7 @@ where $T$ is the length of the audio, $P\left(Y^{\text{aligned}} \mid X\right)$ 
 
   ```bash
     cd scripts-bash
-    run_filter.sh -a /path/to/audio_files -o /path/to/output_dir -b "GEN EXO PSA" -t -0.3
+    run_filter.sh -a /path/to/audio_files -o /path/to/output_dir -b "GEN EXO PSA" -t -0.3 -l language
 
   ```
 </details>
