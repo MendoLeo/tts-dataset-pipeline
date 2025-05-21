@@ -46,7 +46,7 @@ def setup_logging(log_dir: Path):
     if not log_f.exists():
         with open(log_f, "w") as f:
             f.write("Rejected Files Log\n===================\n")
-    
+
     if not history_f.exists():
         with open(history_f, "w", newline="") as f:
             writer = csv.writer(f)
@@ -78,9 +78,10 @@ def main(args):
     log_f, history_f = setup_logging(log_dir)
 
     base_dir_name = audio_dir.stem
-    
-    # skipping if already filtered
-    if output_dir.exists() and any(output_dir.iterdir()):
+    output_subdir = output_dir / base_dir_name
+
+    # skipping if already filtered for this book
+    if output_subdir.exists() and any(output_subdir.iterdir()):
         print(f"Skipping {base_dir_name}")
         return
 
@@ -110,7 +111,7 @@ def main(args):
 
             prob_diff = compute_probability_difference(audio_path, ground_truth, args.language, args.chunk_size_s)
 
-            if process_file(audio_path, transcript_path, prob_diff, args.probability_difference_threshold, output_dir, base_dir_name, log_f):
+            if process_file(audio_path, transcript_path, prob_diff, args.probability_difference_threshold, output_subdir, base_dir_name, log_f):
                 retained_count += 1
             else:
                 rejected_count += 1
@@ -149,7 +150,7 @@ def main(args):
                 retained_count = 0
                 rejected_count = 0
 
-            if process_file(audio_path, transcript_path, prob_diff, args.probability_difference_threshold, output_dir, base_dir_name, log_f):
+            if process_file(audio_path, transcript_path, prob_diff, args.probability_difference_threshold, output_subdir, base_dir_name, log_f):
                 retained_count += 1
             else:
                 rejected_count += 1
