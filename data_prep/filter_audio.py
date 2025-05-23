@@ -26,8 +26,8 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # load MMS aligner model
 bundle = torchaudio.pipelines.MMS_FA
-model = bundle.get_model(with_star=True).to(device)
-DICTIONARY = bundle.get_dict()
+model = bundle.get_model(with_star=False).to(device)
+DICTIONARY = bundle.get_dict(star=None)
 
 
 def compute_probability_difference(audio_path: str, ground_truth: str,language: str, chunk_size_s: int = 15) -> float:

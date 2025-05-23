@@ -32,7 +32,7 @@ fi
 # Boucle pour traiter chaque livre
 for book in $books; do 
     echo "Traitement de $book..." 
-    python3 ../denoising.py --src_path "$src_path/$book" --output_dir "$output_dir" --extension wav
+    python3 ../denoising.py --src_path "$src_path/$book" --output_dir "$output_dir/$book" --extension wav
 done
 
 # usage: inter in scripts-bash en execute ./denoising.sh options
